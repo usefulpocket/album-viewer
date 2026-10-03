@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!-- このページ自身はどこへも通信しない（ZIP の取り寄せは Service Worker が行う）。外部のスクリプトも読まない -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob:; media-src 'self' blob:; connect-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#1d6b86">
+<title>アルバム</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="app.css">
+<script src="album-ui.js" defer></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<div id="open" class="open">
+  <h1>アルバム</h1>
+  <p class="lead">共有されたアルバムの ZIP を開きます。中身は見る分だけ読み込み、この端末の外へは送りません。</p>
+  <label class="pick"><input type="file" id="file" accept=".zip,application/zip"><span>ZIP を選ぶ</span></label>
+  <p class="hint">ここへ ZIP をドラッグしても開けます。</p>
+  <p id="status" class="status" role="status" aria-live="polite"></p>
+</div>
+<div id="app" hidden></div>
+</body>
+</html>
