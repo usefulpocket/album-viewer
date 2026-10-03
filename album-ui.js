@@ -158,7 +158,9 @@
           const i = items.length;
           const a = el('a', 'ph' + (it.kind === 'video' ? ' v' : ''));
           a.href = url(it.video || it.view || it.thumb);
+          a.draggable = false; // 写真をつかんで動かしても何も起きないように（落とした先で「開く」扱いにならない）
           const img = el('img');
+          img.draggable = false;
           img.loading = 'lazy';
           img.decoding = 'async';
           img.alt = (it.cap ? it.cap + ' ' : '') + (s.title || '') + ' ' + caption(it);

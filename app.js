@@ -95,13 +95,25 @@
     const f = input.files && input.files[0];
     if (f) open({ kind: 'file', file: f }, f.name);
   });
-  // ドラッグで開く
-  addEventListener('dragover', e => { e.preventDefault(); openView.classList.add('drag'); });
+  // ドラッグで開く。外（エクスプローラーなど）から持ってきたファイルだけ受け付ける。
+  // ページの中の写真をつかんで落としたときは何もしない（以前は写真を ZIP として開こうとして画面が切り替わっていた）
+  let inner = false;
+  addEventListener('dragstart', () => { inner = true; });
+  addEventListener('dragend', () => { inner = false; });
+  const fromOutside = e => !inner && e.dataTransfer && [...e.dataTransfer.types].includes('Files');
+  addEventListener('dragover', e => {
+    e.preventDefault();
+    if (fromOutside(e)) openView.classList.add('drag'); else e.dataTransfer.dropEffect = 'none';
+  });
   addEventListener('dragleave', e => { if (!e.relatedTarget) openView.classList.remove('drag'); });
   addEventListener('drop', e => {
     e.preventDefault();
     openView.classList.remove('drag');
-    const f = e.dataTransfer && e.dataTransfer.files[0];
-    if (f) open({ kind: 'file', file: f }, f.name);
+    if (!fromOutside(e)) { inner = false; return; }
+    const f = e.dataTransfer.files[0];
+    if (!f) return;
+    // アルバムを見ている最中に ZIP 以外が落ちてきても、見ている画面は消さない
+    if (!app.hidden && !/\.zip$/i.test(f.name)) return;
+    open({ kind: 'file', file: f }, f.name);
   });
 })();
