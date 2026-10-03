@@ -22,12 +22,15 @@
   }
 
   // ---- Service Worker の用意（初回は制御が始まるまで待つ）
+  // 新しい版を置いたあと最初に開くと、古い版が動いたままのことがある（古い版は新しい形式を読めない）。
+  // 開く前に版を確かめ、新しい版が入りかけていたら切り替わるまで待つ
   const ready = (async () => {
+    const changed = new Promise(r => navigator.serviceWorker.addEventListener('controllerchange', r, { once: true }));
     const reg = await navigator.serviceWorker.register('sw.js');
     await navigator.serviceWorker.ready;
-    if (!navigator.serviceWorker.controller) {
-      await new Promise(r => navigator.serviceWorker.addEventListener('controllerchange', r, { once: true }));
-    }
+    try { await reg.update(); } catch { /* 圏外など。今の版で続ける */ }
+    if (reg.installing || reg.waiting) await Promise.race([changed, new Promise(r => setTimeout(r, 10000))]);
+    if (!navigator.serviceWorker.controller) await changed;
     return reg;
   })();
 
