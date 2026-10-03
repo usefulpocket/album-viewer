@@ -63,7 +63,7 @@ main{max-width:1100px;margin:0 auto;padding:4px 16px 64px}
 #lb button:focus-visible{outline:2px solid #9fd3e6}
 .spin{position:absolute;color:#a9b8c0;font-size:.8rem}
 
-/* ビューアの最初の画面（開く ZIP を選ぶ） */
+/* ビューアの最初の画面（開くアルバムを選ぶ・鍵を入れる） */
 .open{max-width:520px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 48px) 16px 48px}
 .open h1{font-size:1.4rem;margin-bottom:8px}
 .lead{color:var(--muted);font-size:.9rem;margin:0 0 20px}
@@ -74,3 +74,8 @@ main{max-width:1100px;margin:0 auto;padding:4px 16px 64px}
 .hint{color:var(--muted);font-size:.8rem;margin:8px 0 0}
 .status{margin:16px 0 0;font-size:.9rem;min-height:1.6em;white-space:pre-wrap}
 .status.err{color:var(--err)}
+.keyform{margin:16px 0 0}
+.keyform label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px}
+.keyform .row{display:flex;gap:8px}
+.keyform input{flex:1;min-width:0;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:inherit}
+.keyform button{font:inherit;font-weight:700;padding:0 18px;border:0;border-radius:8px;background:var(--accent);color:var(--bg);cursor:pointer}

@@ -18,9 +18,13 @@
 <body>
 <div id="open" class="open">
   <h1>アルバム</h1>
-  <p class="lead">共有されたアルバムの ZIP を開きます。中身は見る分だけ読み込み、この端末の外へは送りません。</p>
-  <label class="pick"><input type="file" id="file" accept=".zip,application/zip"><span>ZIP を選ぶ</span></label>
-  <p class="hint">ここへ ZIP をドラッグしても開けます。</p>
+  <p class="lead">共有されたアルバム（ZIP・暗号化した .album）を開きます。中身は見る分だけ読み込み、この端末の外へは送りません。</p>
+  <label class="pick"><input type="file" id="file" accept=".zip,.album,application/zip"><span>アルバムを選ぶ</span></label>
+  <p class="hint">ここへファイルをドラッグしても開けます。</p>
+  <form id="keyform" class="keyform" hidden>
+    <label for="key">鍵（共有された URL を丸ごと貼ってもよい）</label>
+    <span class="row"><input id="key" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"><button type="submit">開く</button></span>
+  </form>
   <p id="status" class="status" role="status" aria-live="polite"></p>
 </div>
 <div id="app" hidden></div>
