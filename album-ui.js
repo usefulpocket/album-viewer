@@ -139,6 +139,12 @@
         const media = s.items.filter(it => it.kind !== 'note').length;
         const sec = el('section', 'scene' + (media ? '' : ' txt')), sh = el('div', 'sh');
         sh.append(el('span', 'st', s.time || ''), el('h3', null, s.title || ''));
+        if (s.map) { // その場面にいた場所を Google マップで開く（座標か場所の名前）
+          const a = el('a', 'map', '地図');
+          a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(s.map);
+          a.target = '_blank'; a.rel = 'noopener noreferrer';
+          sh.append(a);
+        }
         if (media) sh.append(el('span', 'cnt', media + '枚'));
         sec.append(sh);
         if (s.spent && s.spent.length) {
