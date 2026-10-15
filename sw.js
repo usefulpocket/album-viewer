@@ -204,8 +204,14 @@ async function askClients(sid, clientId) {
 
 // ---------------------------------------------------------------- 返す
 
+// アルバムは他人が作ったものかもしれないので、manifest に書かれた種類はそのまま信じない。
+// 写真・動画の種類だけを通し、ほかはダウンロード扱いにする
+const MEDIA = /^(image\/(jpeg|png|webp|gif|avif)|video\/(mp4|webm))$/;
+const mediaType = t => { const b = String(t).split(';')[0].trim().toLowerCase(); return MEDIA.test(b) ? b : 'application/octet-stream'; };
+const SAFE = { 'X-Content-Type-Options': 'nosniff', 'Content-Security-Policy': "default-src 'none'; img-src 'self'; media-src 'self'" };
+
 const text = (status, body, headers) =>
-  new Response(body, { status, headers: Object.assign({ 'Content-Type': 'text/plain; charset=utf-8' }, headers) });
+  new Response(body, { status, headers: Object.assign({ 'Content-Type': 'text/plain; charset=utf-8' }, SAFE, headers) });
 
 function body(a, off, len, s, n) {
   if (n === 0) return null;
@@ -223,7 +229,7 @@ async function serve(req, u, clientId) {
     const f = a.manifest.files[path];
     if (!f) return text(404, 'アルバムの中にありません: ' + path);
     const [off, len, type] = f;
-    const headers = { 'Content-Type': type, 'Accept-Ranges': 'bytes', 'Cache-Control': 'no-store' };
+    const headers = Object.assign({ 'Content-Type': mediaType(type), 'Accept-Ranges': 'bytes', 'Cache-Control': 'no-store' }, SAFE);
     const range = req.headers.get('Range');
     if (!range) {
       headers['Content-Length'] = String(len);
